@@ -26,10 +26,12 @@ Notes: The 802.11 letters (b/g/n/ac/ax) refer to Wi-Fi generations/speeds, not s
 Identify Nearby network wifi netowrks using airodump-ng
   - Setup monitormode on your network interface with airmon-ng Or with ifconfig/iwconfig
   - Start airodump-ng either on specific channel or listen in and find network.
+
 **Hackshake Capture**
 Capture handshake with airodump-ng.
   - start airodump-ng, possibly on a channel, and enable output to capture the handshake
   - use aireplay to generate network traffic as a client to the Access point to Deauth the client. This will make the client and AP make a "new" handshake, which is the one captured.
+
 **Crack Password**
 Crack the password with a tool like aircrack-ng, john, hashcat, or cowpatty. Either use Wordlist or bruteforce every combination(this takes alot of time)
 - You can use custom made password lists with tools
@@ -39,7 +41,10 @@ Crack the password with a tool like aircrack-ng, john, hashcat, or cowpatty. Eit
 log on with the key/password which was cracked in previous step.
 - either use the GUI or CLI method of connecting to the wifi.
 
+Basically:
+
 > airmon-ng -> airodump-ng -> aireplay-ng -> airodump-ng -> generate Hash -> Hashcat/cowpatty/john/aircrack-ng -> **Great Success**
+
 
 ----
 
@@ -138,7 +143,7 @@ Now the handshake will take place and airodump-ng will capture it and store it.
 ----
 
 
-# hashcat
+# Hashcat
 
 ----
 
@@ -167,8 +172,12 @@ hashcat -m 22000 HASH WORDLIST
 | `-a X`     | Specifies Attack Mode ( See Attack Modes section) | -a 3 |
 | `HASH`   |Specifies the hash which is being worked on to carck | |
 
+---
 
 ### Attack Modes
+
+---
+
 #### Attack Mode 1 Combinator 
 Command Example
 ```
@@ -198,7 +207,13 @@ Creating 4 words in total, which is used.
 If wordlist 1 has 3 words and wordlist 2 has 2 it would be:
 `3 x 2 = 6` 
 Creating 6 words in total, which is used.
+
+---
+
 #### Attack Mode 2 
+
+
+---
 
 #### Attack Mode 3 Mask 
 Example:
@@ -233,11 +248,17 @@ Example 2 : ` '?l?l?l?l?l' --incement-min 3 ` will bruteforce lowercase letters 
 Example 3 : ` '?d?l?l?l?l' ` This will create possibilities up to a 5 chacter long string, every combination will start with a digit (?d) and then placement 2-5 will be lowercase ascii letters. A valid input would be **"1abcd"** and **"2abcd"**
 
 
-
+---
 
 #### Attack Mode 4 
 
+
+---
+
 #### Attack Mode 5 
+
+
+---
 
 #### Attack Mode 6 Hybrid: Wordlist + Mask
 Example:
@@ -281,6 +302,7 @@ so by that logic the logically Calculation of ?s should be: 33
   33 = ?s                    == Left with 33 possible valid combinations left in ?a which means ?s must be 33 valid characters.
 
 
+---
 
 #### Attack Mode 7 Hybrid: Mask + Wordlist
 Example:
@@ -292,13 +314,53 @@ Example if the word from wordlist was "hello", and the mask was "`'?d?d?l' `"
 One of the results would be `12ahello`
 
 
+---
+
 ### Advanced and Tailored
 
+**Options**
 | Fucntions  | Functionality | example |
 | `-I`       | Give a list of available CPU and GPU devices | -I |
 | `-D X`     | Speifies what type of device used either 1 GPU or 2 CPU| -D 1 |
 | `-d X`     | Specifies specific device ( Used -I to find devices ) | -d 8 |
+| `-w X`     | Specify Workload 1.4 (1 is lowest 4 highest)    |  -w 1 |
+| `-O` or `--påtimized-kernel-enable`| Speficy to optimize kernel, HIGHLY recommended when doing -w 4  | -O |
+|`--increment` | Set to Increment on mask | --increment |
+| `--increment-min x`     | Set minimum mask size    |  --increment-min 8 |
+| `--increment-max=x`     | Set maximum mask size    |  --increment-max=10 |
+| `--cpu-affinity`| Specify which cores to use  | --cpu-affinity |
+| `--hook-threads`| Specify number of threads used | --hook-threads | 
 
+**Mask Characters**
+Used when using attack modes with masks
+|Mask Characters| Description | Valid characters |
+|:---|:---|:---|
+| ?d | Digits (0-9) | 10 |
+| ?l | Lowercase Letters (a-z)| 26 |
+| ?u | Uppercase Letters (A-Z) | 26 |
+| ?h | Lowercase Letters and Digits (0-9 + a-z) | 36 |
+| ?H | Uppercase Letters and Digits (0-9 + A-Z) | 36 |
+| ?s | Special Characers ( SPACE . , # ! ...) | 33 |
+| ?a | All upper- lowercase letters in ASCII, Digits and specials | 95 |
+| ?b | All possible byte values | ? |
+
+**Rules**
+Used with -j or -k in hashcat (current) and needcs to be in a rule file. It was compatible with hashcat-legacy
+N = Number 
+M = Number 
+X = Character 
+Y = Character 
+
+|Rule Function | Name | Description | Example | Result Example | Result Example 2 |
+|:--- |:---- |:---- | :---| :--- |
+| <N  | Reject Less | Rejects plains longer than N | <3 | HelloWorld123!? -> | S3C -> S3C| 
+| >N  | Reject Greater | Rejects plains Less than N | >3 | HelloWorld123!? -> HelloWorld123!? | S3C -> |
+| _N  | Reject Equal | Rejects plains Not equal N in length | _3 | HelloWorld123!? -> | S3C -> S3C|
+| !X  | Reject Cointain | Rejects plains Not containing character X | !C | HelloWorld123!? -> | S3C -> S3C|
+| XX  | Reject XX | Rejects plains Not XXX | XX | HelloWorld123!? -> HelloWorld123!? | S3C -> S3C|
+
+
+---
 
 
 
@@ -384,17 +446,21 @@ hashcat -a 3 -m 22000 HASH 'MASK'
 hashcat -a 3 -m 22000 HASH --increment --increment-min 8 --increment-max=14 'MAXIMUMMASKS'
 ```
 **Hashcat -a 4 w/ on WPA Encryption**
-
+```
+...
+```
 **Hashcat -a 5 w/ on WPA Encryption**
-
+```
+...
+```
 
 **Hashcat -a 6 w/ Hybrid: Wordlist + Mask on WPA Encryption**
 ```
-hashcat -a 6 -m 22000 HASH WORDLIST 'MASK'
+...
 ```
 **Hashcat -a 7 w/ Hybrid: Mask + Wordlist on WPA Encryption**
 ```
-hashcat -a 7 -m 22000 HASH WORDLIST 'MASK'
+...
 ```
 
 
