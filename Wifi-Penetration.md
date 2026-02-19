@@ -1,5 +1,7 @@
 # Wifi penetration Theeury and in-depth
 
+----
+
 ## wifi encryption standards
 
 
@@ -37,10 +39,14 @@ Crack the password with a tool like aircrack-ng, john, hashcat, or cowpatty. Eit
 log on with the key/password which was cracked in previous step.
 - either use the GUI or CLI method of connecting to the wifi.
 
-
+----
 
 
 # Aircrack-ng
+
+----
+
+the toolbox of multiple network tools 
 ## Airmon-ng
 List network interfaces and status
 ```
@@ -122,10 +128,13 @@ The network interface used: `wlan0mon`
 Now the handshake will take place and airodump-ng will capture it and store it.
 
 
-
+----
 
 
 # hashcat
+
+----
+
 ## Before cracking
 Before cracking the airodump-ng capture the file, we must make it into a format hashcat can work with and understand.
 Use hcxpcapngtool to create the hash which can be used by hashcat.
@@ -290,10 +299,13 @@ One of the results would be `12ahello`
 
 
 
-
+----
 
 
 # The Cheatsheet
+
+----
+
 ## Capture and Validate
 **Enable monitor mode, this example the network interface is wlan0, which is then made to wlan0mon.**
 ```
