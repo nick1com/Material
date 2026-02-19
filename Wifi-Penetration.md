@@ -19,9 +19,9 @@
 
 Notes: The 802.11 letters (b/g/n/ac/ax) refer to Wi-Fi generations/speeds, not security.
 
+----
 
 ## Traditional WPA PW Attack
-
 **Reconnaissance**:
 Identify Nearby network wifi netowrks using airodump-ng
   - Setup monitormode on your network interface with airmon-ng Or with ifconfig/iwconfig
@@ -39,10 +39,12 @@ Crack the password with a tool like aircrack-ng, john, hashcat, or cowpatty. Eit
 log on with the key/password which was cracked in previous step.
 - either use the GUI or CLI method of connecting to the wifi.
 
+> airmon-ng -> airodump-ng -> aireplay-ng -> airodump-ng -> generate Hash -> Hashcat/cowpatty/john/aircrack-ng -> **Great Success**
+
 ----
 
 
-# Aircrack-ng
+# Aircrack-ng Toolkit
 
 ----
 
@@ -71,7 +73,7 @@ Remember to restart disabling monitormode.
 ## Airodump-ng
 Listen on network interface for traffic 
 ```
-sudo airodump-ng wlan0mon -c 1 -w Captured_file
+sudo airodump-ng wlan0mon -c 1 -w captured_file
 ```
 Listen on network interface : `wlan0mon`
 for network traffic on channel 1: `-c 1`
@@ -126,6 +128,11 @@ The Client which is deauthenticated: `-c ESSID`
 The network interface used: `wlan0mon`
 
 Now the handshake will take place and airodump-ng will capture it and store it.
+
+## Aircrack-ng
+
+## Airograph-ng
+
 
 
 ----
